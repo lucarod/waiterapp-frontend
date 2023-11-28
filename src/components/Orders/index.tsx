@@ -7,14 +7,14 @@ const orders: Order[] = [
   {
     _id: '123',
     table: '123',
-    status: '123',
+    status: 'WAITING',
     products: [
       {
         _id: '123',
         quantity: 1,
         product: {
           name: '123',
-          imagePath: '123',
+          imagePath: '1700849271693-quatro-queijos.png.png',
           price: 1,
         },
       }
@@ -33,12 +33,12 @@ export function Orders() {
       <OrdersBoard
         icon="👩‍🍳"
         title="Em preparação"
-        orders={orders}
+        orders={[]}
       />
       <OrdersBoard
         icon="✅"
         title="Pronto!"
-        orders={orders}
+        orders={[]}
       />
     </Container>
   );
