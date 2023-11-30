@@ -3,16 +3,24 @@ import { OrderModal } from '../OrderModal';
 import { Order } from '../../types/Order';
 
 import { Board, OrdersContainer } from './styles';
+import { api } from '../../utils/api';
 
 interface OrdersBoardProps {
   icon: string;
   title: string;
   orders: Order[];
+  onCancelOrder: (orderId: string) => void;
 }
 
-export function OrdersBoard({ icon, title, orders }: OrdersBoardProps) {
+export function OrdersBoard({
+  icon,
+  title,
+  orders,
+  onCancelOrder
+}: OrdersBoardProps) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   function handleOpenModal(order: Order) {
     setIsModalVisible(true);
@@ -24,12 +32,24 @@ export function OrdersBoard({ icon, title, orders }: OrdersBoardProps) {
     setSelectedOrder(null);
   }
 
+  async function handleCancelOrder() {
+    if (!selectedOrder) return;
+
+    setIsLoading(true);
+    await api.delete(`orders/${selectedOrder._id}`);
+    setIsLoading(false);
+    setIsModalVisible(false);
+    onCancelOrder(selectedOrder._id);
+  }
+
   return (
     <Board>
       <OrderModal
         visible={isModalVisible}
         order={selectedOrder}
         onClose={handleCloseModal}
+        onCancelOrder={handleCancelOrder}
+        isLoading={isLoading}
       />
       <header>
         <span>{icon}</span>
